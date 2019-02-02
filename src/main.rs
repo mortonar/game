@@ -1,5 +1,7 @@
 extern crate amethyst;
 
+use std::env;
+
 use amethyst::{
     prelude::*,
     renderer::{DisplayConfig, DrawFlat, Pipeline, PosNormTex, RenderBundle, Stage},
@@ -13,9 +15,16 @@ impl SimpleState for Example {}
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
 
+    let display_config = if env::var("G_LAPTOP").is_ok() {
+        "laptop_display_config.ron"
+    } else {
+        "display_config.ron"
+    };
+
     let path = format!(
-        "{}/resources/display_config.ron",
-        application_root_dir()
+        "{}/resources/{}",
+        application_root_dir(),
+        display_config
     );
     let config = DisplayConfig::load(&path);
 
